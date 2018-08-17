@@ -9,7 +9,7 @@ export default {
       body: data
     });
   },
-  async authenticate(user) {
+  async register(user) {
     let data = JSON.stringify(user);
     return await fetch("/api/users/register", {
       method: "post",
@@ -25,7 +25,6 @@ export default {
   },
   async update(item) {
     let data = JSON.stringify(item);
-    console.log(data);
     return await fetch("/api/users/update/" + item.id, {
       method: "post",
       headers: {'Content-Type': 'application/json'},

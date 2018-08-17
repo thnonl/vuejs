@@ -1,5 +1,5 @@
 <template>
-<div>
+  <div>
     <h1>Products</h1>
 
     <p>This component demonstrates fetching data from the server.</p>
@@ -9,38 +9,44 @@
     </div>
 
     <div v-if="!products" class="text-center">
-        <p><em>Loading...</em></p>
-        <h1>
-            <icon icon="spinner" pulse/>
-        </h1>
+      <p>
+        <em>Loading...</em>
+      </p>
+      <h1>
+        <icon icon="spinner" pulse/>
+      </h1>
     </div>
 
     <template v-if="products">
-        <table class="table">
-            <thead class="bg-dark text-white">
-                <tr>
-                    <th>Product Id</th>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Created On</th>
-                    <th>Updated At</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr :class="index % 2 == 0 ? 'bg-white' : 'bg-light'" v-for="(product, index) in products" :key="index">
-                    <td class="product-id"><a href="javascript:void(0)" @click.prevent="getProduct">{{ product.id }}</a></td>
-                    <td>{{ product.title }}</td>
-                    <td>{{ product.description }}</td>
-                    <td>{{ product.price }}</td>
-                    <td>{{ product.createdOn }}</td>
-                    <td>{{ product.updatedAt }}</td>
-                    <td><button class='btn btn-danger' :id="product.id" @click.prevent="deleteProduct">Delete</button></td>
-                </tr>
-            </tbody>
-        </table>
-        <!-- <nav aria-label="...">
+      <table class="table">
+        <thead class="bg-dark text-white">
+          <tr>
+            <th>Product Id</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Created On</th>
+            <th>Updated At</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr :class="index % 2 == 0 ? 'bg-white' : 'bg-light'" v-for="(product, index) in products" :key="index">
+            <td class="product-id">
+              <a href="javascript:void(0)" @click.prevent="getProduct">{{ product.id }}</a>
+            </td>
+            <td>{{ product.title }}</td>
+            <td>{{ product.description }}</td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.createdOn }}</td>
+            <td>{{ product.updatedAt }}</td>
+            <td>
+              <button class='btn btn-danger' :id="product.id" @click.prevent="deleteProduct">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- <nav aria-label="...">
                 <ul class="pagination justify-content-center">
                     <li :class="'page-item' + (currentPage == 1 ? ' disabled' : '')">
                         <a class="page-link" href="#" tabindex="-1" @click="loadPage(currentPage - 1)">Previous</a>
@@ -54,7 +60,7 @@
                 </ul>
             </nav> -->
     </template>
-</div>
+  </div>
 </template>
 
 <script>
@@ -68,11 +74,7 @@ export default {
     "product-form": ProductForm
   },
 
-  computed: {
-    totalPages: function() {
-      // return Math.ceil(this.total / this.pageSize);
-    }
-  },
+  computed: {},
 
   data() {
     return {
