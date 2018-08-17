@@ -1,7 +1,5 @@
 import Vue from "vue";
 
-let http = Vue.prototype.$http
-
 export default {
   async getAll() {
     return await Vue.prototype.$http.get(`/api/products/`);

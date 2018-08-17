@@ -11,6 +11,20 @@
     using Vue2Spa.Helper;
     using Vue2Spa.Models;
 
+    public interface IProductRepository
+    {
+        IQueryable<Product> Gets();
+
+        long GetTotal();
+ 
+        Product GetProduct(ObjectId id);
+ 
+        Product Create(Product p);
+ 
+        void Update(ObjectId id, Product p);
+        void Remove(ObjectId id);
+    }
+    
     public class ProductRepository : IProductRepository
     {
         MongoClient _client;
