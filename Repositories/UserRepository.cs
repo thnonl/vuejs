@@ -118,7 +118,7 @@ namespace Vue2Spa.Repositories
             if (user != null)
             {
                 var res = Query<Product>.EQ(e => e.Id, id).ToBsonDocument();
-                var operation = _db.GetCollection<Product>(nameof(Product)).DeleteOne(res);
+                var operation = _db.GetCollection<Product>(nameof(User)).DeleteOne(res);
             }
         }
 

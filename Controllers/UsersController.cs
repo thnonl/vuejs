@@ -15,7 +15,7 @@ using MongoDB.Bson;
 namespace WebApi.Controllers
 {
     [Authorize]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class UsersController : Controller
     {
         private readonly IUserRepository _respository;
@@ -53,7 +53,7 @@ namespace WebApi.Controllers
             var tokenString = tokenHandler.WriteToken(token);
 
             // return basic user info (without password) and token to store client side
-            return Ok(new {
+            return new OkObjectResult(new {
                 Id = user.Id,
                 Username = user.Username,
                 FirstName = user.FirstName,
@@ -83,14 +83,14 @@ namespace WebApi.Controllers
         public IActionResult GetAll()
         {
             var users =  _respository.GetAll();
-            return Ok(users);
+            return new OkObjectResult(users);
         }
 
         [HttpGet("{id}")]
         public IActionResult GetById(string id)
         {
             var user =  _respository.GetById(new ObjectId(id));
-            return Ok(user);
+            return new OkObjectResult(user);
         }
 
         [HttpPut("{id}")]

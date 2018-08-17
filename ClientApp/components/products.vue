@@ -91,7 +91,7 @@ export default {
     async loadPage() {
       try {
         let response = await ProductApi.getAll();
-        this.products = response.data;
+        this.products = response;
       } catch (err) {
         window.alert(err);
         console.log(err);
@@ -102,7 +102,7 @@ export default {
       let td = event.target;
       let id = td.text;
       let response = await ProductApi.get(id);
-      this.currentProduct = response.data;
+      this.currentProduct = response;
       this.isProcessing = false;
     },
     async submit(event) {

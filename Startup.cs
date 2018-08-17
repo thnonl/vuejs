@@ -11,81 +11,79 @@ using Vue2Spa.Helper;
 using Vue2Spa.Models;
 using Vue2Spa.Repositories;
 
-namespace Vue2Spa
-{
-    public class Startup
-    {
-        public Startup(IConfiguration configuration)
-        {
+namespace Vue2Spa {
+    public class Startup {
+        public Startup (IConfiguration configuration) {
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
+        public void ConfigureServices (IServiceCollection services) {
+            services.AddCors ();
             // Add framework services.
-            services.AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc ()
+                .SetCompatibilityVersion (CompatibilityVersion.Version_2_1);
 
             // Simple example with dependency injection for a data provider.
-            services.AddSingleton<IProductRepository>(new ProductRepository());
+            services.AddSingleton<IProductRepository> (new ProductRepository ());
+            services.AddSingleton<IUserRepository> (new UserRepository ());
 
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
+            var appSettingsSection = Configuration.GetSection ("AppSettings");
+            services.Configure<AppSettings> (appSettingsSection);
 
             // configure jwt authentication
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
+            var appSettings = appSettingsSection.Get<AppSettings> ();
+            var key = Encoding.ASCII.GetBytes (appSettings.Secret);
+            services.AddAuthentication (x => {
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer (x => {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey (key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
+        public void Configure (IApplicationBuilder app, IHostingEnvironment env) {
+            if (env.IsDevelopment ()) {
+                app.UseDeveloperExceptionPage ();
 
                 // Webpack initialization with hot-reload.
-                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
-                {
+                app.UseWebpackDevMiddleware (new WebpackDevMiddlewareOptions {
                     HotModuleReplacement = true,
                 });
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
+            } else {
+                app.UseExceptionHandler ("/Home/Error");
             }
 
-            app.UseStaticFiles();
+            app.UseStaticFiles ();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
+            // global cors policy
+            app.UseCors (x => x
+                .AllowAnyOrigin ()
+                .AllowAnyMethod ()
+                .AllowAnyHeader ()
+                .AllowCredentials ());
+
+            app.UseAuthentication ();
+
+            app.UseMvc (routes => {
+                routes.MapRoute (
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
 
-                routes.MapSpaFallbackRoute(
+                routes.MapSpaFallbackRoute (
                     name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
+                    defaults : new { controller = "Home", action = "Index" });
             });
         }
     }
